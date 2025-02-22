@@ -172,7 +172,6 @@ productRouter.get("/combined/:month", async (req, res) => {
 
 productRouter.get("/statistics/:month", async (req, res) => {
   const { month } = req.params;
-  console.log("Requested Month:", month);
 
   try {
     const parsedMonth = parseInt(month, 10);
@@ -186,7 +185,6 @@ productRouter.get("/statistics/:month", async (req, res) => {
     }
 
     const products = await store.getProductsByMonth(parsedMonth);
-    console.log("Got products from DB:", products);
 
     let sale = 0;
     let sold = 0;
@@ -201,12 +199,10 @@ productRouter.get("/statistics/:month", async (req, res) => {
     });
 
     const stats = {
-      totalSale: sale,
+      totalSale: parseFloat(sale),
       totalSold: sold,
       totalUnsold: total - sold,
     };
-
-    console.log("Stats:", stats);
 
     return res.status(200).json({
       status: "success",

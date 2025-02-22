@@ -1,97 +1,122 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Search } from "lucide-react";
 
-const Transactions = () => {
+const Transactions = ({ selectedMonth, setSelectedMonth }) => {
   const [search, setSearch] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
+  const [error, setError] = useState("");
+  const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
 
-  const months = ["January", "February", "March", "April", "May", "June"];
-  const transactions = [
-    {
-      id: 1,
-      title: "Product A",
-      description: "Sample Item",
-      price: "$100",
-      sold: "Yes",
-      category: "Electronics",
-    },
-    {
-      id: 2,
-      title: "Product B",
-      description: "Another Item",
-      price: "$150",
-      sold: "No",
-      category: "Furniture",
-    },
-    {
-      id: 3,
-      title: "Product C",
-      description: "Third Item",
-      price: "$200",
-      sold: "Yes",
-      category: "Clothing",
-    },
-    {
-      id: 4,
-      title: "Product D",
-      description: "Fourth Item",
-      price: "$250",
-      sold: "No",
-      category: "Accessories",
-    },
+  const months = [
+    { name: "January", value: 1 },
+    { name: "February", value: 2 },
+    { name: "March", value: 3 },
+    { name: "April", value: 4 },
+    { name: "May", value: 5 },
+    { name: "June", value: 6 },
+    { name: "July", value: 7 },
+    { name: "August", value: 8 },
+    { name: "September", value: 9 },
+    { name: "October", value: 10 },
+    { name: "November", value: 11 },
+    { name: "December", value: 12 },
   ];
 
-  return (
-    <div className="max-w-6xl mx-auto bg-white p-6 min-h-screen rounded-lg">
-      {/* Heading */}
-      {/* Search & Month Filter */}
-      <div className="flex items-between gap-4 mb-6 p-4 rounded-lg">
-        <h1 className="text-3xl font-bold text-indigo-700 mb-6 text-center">
-          Transactions Dashboard
-        </h1>
-        <input
-          type="text"
-          placeholder="Search transactions..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-1/3 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 bg-white text-black"
-        />
+  useEffect(() => {
+    if (selectedMonth) {
+      fetchTransactions(selectedMonth);
+    }
+  }, [selectedMonth, currentPage, limit, search]);
 
-        <select
-          className="p-3 border border-gray-300 rounded-lg shadow-sm bg-white text-black focus:ring-2 focus:ring-indigo-500"
-          onChange={(e) => setSelectedMonth(e.target.value)}
-        >
-          <option value="">Select Month</option>
-          {months.map((month) => (
-            <option key={month} value={month}>
-              {month}
-            </option>
-          ))}
-        </select>
+  const fetchTransactions = async (month) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/products/transactions/${month}?search=${search}&page=${currentPage}&limit=${limit}`
+      );
+      setTransactions(response.data.data);
+    } catch (err) {
+      setError("Failed to fetch transactions.");
+    }
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-5 w-full">
+      {/* Search & Month Filter */}
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-700 text-center md:text-left">
+          TRANSACTIONS DASHBOARD
+        </h1>
+
+        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+          {/* Search Bar */}
+          <div className="relative w-full sm:w-64">
+            <input
+              type="text"
+              placeholder="Search transactions..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 bg-white text-black"
+            />
+            <Search
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+              size={20}
+            />
+          </div>
+
+          {/* Month Selector */}
+          <select
+            className="w-full sm:w-auto p-3 border border-gray-300 rounded-lg shadow-sm bg-white text-black focus:ring-2 focus:ring-indigo-500"
+            onChange={(e) => setSelectedMonth(Number(e.target.value))}
+            value={selectedMonth}
+          >
+            <option value="">Select Month</option>
+            {months.map((month) => (
+              <option key={month.value} value={month.value}>
+                {month.name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Transactions Table */}
-      <div className="overflow-x-auto p-4">
-        <table className="w-full text-left">
-          <thead className="text-black">
-            <tr>
-              <th className="p-3">ID</th>
-              <th className="p-3">Title</th>
-              <th className="p-3">Description</th>
-              <th className="p-3">Price</th>
-              <th className="p-3">Sold</th>
+      <div className="overflow-x-auto mt-6">
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+            <strong className="font-bold">Error:</strong>
+            <span className="block sm:inline">{error}</span>
+            <button
+              onClick={() => setError("")}
+              className="absolute top-0 bottom-0 right-0 px-4 py-3"
+            >
+              ✖
+            </button>
+          </div>
+        )}
+
+        <table className="w-full border border-gray-300 rounded-lg shadow-lg">
+          <thead className="text-black bg-gray-100">
+            <tr className="border-b border-gray-300">
+              <th className="p-3 border-r">ID</th>
+              <th className="p-3 border-r">Title</th>
+              <th className="p-3 border-r hidden md:table-cell">Description</th>
+              <th className="p-3 border-r">Price</th>
+              <th className="p-3 border-r">Sold</th>
               <th className="p-3">Category</th>
             </tr>
           </thead>
           <tbody className="text-black">
-            {transactions.map((tx, index) => (
-              <tr key={tx.id}>
-                <td className="p-3">{tx.id}</td>
-                <td className="p-3">{tx.title}</td>
-                <td className="p-3">{tx.description}</td>
-                <td className="p-3">{tx.price}</td>
-                <td className="p-3">{tx.sold}</td>
+            {transactions.map((tx) => (
+              <tr key={tx.id} className="border-b border-gray-300">
+                <td className="p-3 border-r">{tx.id}</td>
+                <td className="p-3 border-r">{tx.title}</td>
+                <td className="p-3 border-r hidden md:table-cell">
+                  {tx.description}
+                </td>
+                <td className="p-3 border-r">{tx.price}</td>
+                <td className="p-3 border-r">{tx.sold ? "Yes" : "No"}</td>
                 <td className="p-3">{tx.category}</td>
               </tr>
             ))}
@@ -100,36 +125,28 @@ const Transactions = () => {
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex justify-between items-center mt-6 p-4 rounded-lg">
-        <span className="text-black font-medium">Page : {currentPage}</span>
+      <div className="flex flex-col md:flex-row justify-between items-center p-4 rounded-lg gap-4">
+        <span className="text-black font-medium text-lg">
+          Page: {currentPage}
+        </span>
 
         <div className="flex gap-2">
           <button
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            className="px-4 py-2 text-black hover:bg-gray-600 rounded-lg transition duration-200"
+            className="px-4 py-2 text-black bg-gray-200 hover:bg-gray-300 rounded-lg transition duration-200"
           >
             Previous
           </button>
           <button
             onClick={() => setCurrentPage((prev) => prev + 1)}
-            className="px-4 py-2 text-black hover:bg-gray-600 rounded-lg transition duration-200"
+            className="px-4 py-2 text-black bg-gray-200 hover:bg-gray-300 rounded-lg transition duration-200"
           >
             Next
           </button>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-black">Per page:</span>
-          <select
-            className="p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 text-black"
-            onChange={(e) => setLimit(e.target.value)}
-          >
-            {[10, 20, 50].map((num) => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
+          <p className="text-black font-medium text-lg">Per page : {limit}</p>
         </div>
       </div>
     </div>

@@ -89,7 +89,7 @@ class ProductStore {
     let params = [month];
 
     if (search) {
-      query += ` AND (title LIKE ? OR category LIKE ? OR description LIKE ?)`;
+      query += ` AND (title LIKE ? OR price LIKE ? OR description LIKE ?)`;
       const searchTerm = `%${search}%`;
       params.push(searchTerm, searchTerm, searchTerm);
     }
@@ -197,7 +197,7 @@ class ProductStore {
     if (this.db) {
       await this.db.end();
       this.db = null;
-      console.log("✅ Database connection closed.");
+      console.log("Database connection closed.");
     }
   }
 }
