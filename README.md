@@ -3,9 +3,17 @@
 ## **Introduction**  
 This repository showcases the Sales Dashboard that displays statistical insights and a pie chart, bar chart visualization of product categories for a selected month. The application is built using React, Tailwind CSS, and Recharts, with data fetched from a backend API.
 
-## **Deployment Link:**
+## **Deployment Link**
 - **Frontend Link** : https://roxiler-systems-wine.vercel.app/
 - **Backend Link** : https://roxiler-systems-c28u.onrender.com
+
+## **Important Notes**
+- The backend is deployed on Render, which provides a free-tier hosting solution for backend APIs. However, free-tier instances on Render spin down if they are inactive for a period of time.
+- I have used Avien Console to manage the MySQL database, allowing easy query execution and data inspection. It helps in debugging and ensuring backend API data consistency.
+- For local development, update the API URL in the .env file at the root directory:
+  ```
+  VITE_API_URL=https://localhost:3000/products
+  ```
 
 ## **Prerequisites**
 
