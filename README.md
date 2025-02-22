@@ -4,7 +4,7 @@
 This repository showcases the Sales Dashboard that displays statistical insights and a pie chart, bar chart visualization of product categories for a selected month. The application is built using React, Tailwind CSS, and Recharts, with data fetched from a backend API.
 
 ## **Deployment Link:**
-- **Frontend Link** : https://fintech-portfolio-dashboard.vercel.app/
+- **Frontend Link** : https://roxiler-systems-wine.vercel.app/
 - **Backend Link** : https://roxiler-systems-c28u.onrender.com
 
 ## **Prerequisites**
