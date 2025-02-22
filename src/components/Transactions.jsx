@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Search } from "lucide-react";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const Transactions = ({ selectedMonth, setSelectedMonth }) => {
   const [search, setSearch] = useState("");
@@ -33,7 +34,8 @@ const Transactions = ({ selectedMonth, setSelectedMonth }) => {
   const fetchTransactions = async (month) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/products/transactions/${month}?search=${search}&page=${currentPage}&limit=${limit}`
+        API_BASE_URL +
+          `/transactions/${month}?search=${search}&page=${currentPage}&limit=${limit}`
       );
       setTransactions(response.data.data);
     } catch (err) {

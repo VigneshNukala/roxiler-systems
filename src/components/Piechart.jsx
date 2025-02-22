@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 const Piechart = ({ selectedMonth }) => {
   const [pieData, setPieData] = useState([]);
   const [error, setError] = useState("");
@@ -14,9 +15,7 @@ const Piechart = ({ selectedMonth }) => {
 
   const fetchPieData = async (month) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/products/pie-chart/${month}`
-      );
+      const response = await axios.get(API_BASE_URL + `/pie-chart/${month}`);
 
       const formattedData = response.data.data.map((item, index) => ({
         name: item.category,

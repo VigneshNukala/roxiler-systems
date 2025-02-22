@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 import {
   BarChart,
   Bar,
@@ -38,9 +38,7 @@ const Barchart = ({ selectedMonth }) => {
 
   const fetchBarchartData = async (month) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/products/bar-chart/${month}`
-      );
+      const response = await axios.get(API_BASE_URL + `/bar-chart/${month}`);
       const formattedData = response.data.data.map((item) => ({
         range: item.price_range,
         count: item.item_count,

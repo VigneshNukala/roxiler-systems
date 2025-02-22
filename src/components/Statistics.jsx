@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 const Statistics = ({ selectedMonth }) => {
   const [statistics, setStatistics] = useState({});
   const [error, setError] = useState("");
@@ -28,9 +28,7 @@ const Statistics = ({ selectedMonth }) => {
 
   const fetchStatistics = async (month) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/products/statistics/${month}`
-      );
+      const response = await axios.get(API_BASE_URL + `/statistics/${month}`);
       setStatistics(response.data.data);
       setError("");
     } catch (err) {
