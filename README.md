@@ -49,7 +49,7 @@ npm run dev  # or yarn dev
 - **Frontend**
 To start the frontend server, navigate to the root directory (if not already there) and run in a seperate terminal:
 ```bash
-cd frontend/
+cd ..
 npm run dev  # or yarn start
 ```
 
