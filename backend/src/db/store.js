@@ -16,9 +16,7 @@ class ProductStore {
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
         port: 21049,
-        ssl: {
-          rejectUnauthorized: false,
-        },
+        ssl: { rejectUnauthorized: false },
       });
       console.log("Database connected successfully!");
     }
